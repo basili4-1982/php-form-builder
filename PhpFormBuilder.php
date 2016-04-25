@@ -33,7 +33,8 @@ class PhpFormBuilder {
 			'add_nonce'    => false,
 			'add_honeypot' => true,
 			'form_element' => true,
-			'add_submit'   => true
+			'add_submit'   => true,
+			'role'=>'form'
 		);
 
 		// Merge with arguments, if present
@@ -104,6 +105,12 @@ class PhpFormBuilder {
 				break;
 
 			case 'add_nonce':
+				if ( ! is_string( $val ) && ! is_bool( $val ) ) {
+					return false;
+				}
+				break;
+
+			case 'role':
 				if ( ! is_string( $val ) && ! is_bool( $val ) ) {
 					return false;
 				}
