@@ -34,7 +34,7 @@ class PhpFormBuilder {
 			'add_honeypot' => true,
 			'form_element' => true,
 			'add_submit'   => true,
-			'role'=>'form'
+			'role'		   =>'form'
 		);
 
 		// Merge with arguments, if present
