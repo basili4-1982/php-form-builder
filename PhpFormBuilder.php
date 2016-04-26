@@ -212,27 +212,46 @@ class PhpFormBuilder {
 
 		$output = '';
 
-		if ( $this->form['form_element'] ) {
-			$output .= '<form method="' . $this->form['method'] . '"';
+		$formOpt=$this->form;
 
-			if ( ! empty( $this->form['enctype'] ) ) {
+		if ( isset($formOpt['form_element']) ) {
+			$output .= '<form method="' . $formOpt['method'] . '"';
+			unset($formOpt['method']);
+
+			if ( ! empty( $formOpt['enctype'] ) ) {
 				$output .= ' enctype="' . $this->form['enctype'] . '"';
+				unset($formOpt['enctype']);
 			}
 
-			if ( ! empty( $this->form['action'] ) ) {
-				$output .= ' action="' . $this->form['action'] . '"';
+
+			if ( ! empty( $formOpt['action'] ) ) {
+				$output .= ' action="' . $formOpt['action'] . '"';
+				unset($formOpt['action']);
 			}
 
-			if ( ! empty( $this->form['id'] ) ) {
-				$output .= ' id="' . $this->form['id'] . '"';
+			if ( ! empty( $formOpt['id'] ) ) {
+				$output .= ' id="' . $formOpt['id'] . '"';
+				unset($formOpt['id']);
 			}
 
-			if ( count( $this->form['class'] ) > 0 ) {
-				$output .= $this->_output_classes( $this->form['class'] );
+			if ( count( $formOpt['class'] ) > 0 ) {
+				$output .= $this->_output_classes( $formOpt['class'] );
+				unset($formOpt['class']);
 			}
 
-			if ( $this->form['novalidate'] ) {
+			if ( $formOpt['novalidate'] ) {
 				$output .= ' novalidate';
+				unset($formOpt['novalidate']);
+			}
+
+
+			if (!empty($formOpt)){
+
+
+				foreach ($formOpt as $key=>$val){
+					$output.= $key.'="'.$val.'"';
+				}
+
 			}
 
 			$output .= '>';
