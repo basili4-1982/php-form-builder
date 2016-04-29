@@ -218,44 +218,32 @@ class PhpFormBuilder {
 			$output .= '<form method="' . $formOpt['method'] . '"';
 			unset($formOpt['method']);
 
-			if ( ! empty( $formOpt['enctype'] ) ) {
-				$output .= ' enctype="' . $this->form['enctype'] . '"';
-				unset($formOpt['enctype']);
-			}
-
-
-			if ( ! empty( $formOpt['action'] ) ) {
-				$output .= ' action="' . $formOpt['action'] . '"';
-				unset($formOpt['action']);
-			}
-
-			if ( ! empty( $formOpt['id'] ) ) {
-				$output .= ' id="' . $formOpt['id'] . '"';
-				unset($formOpt['id']);
-			}
-
 			if ( count( $formOpt['class'] ) > 0 ) {
 				$output .= $this->_output_classes( $formOpt['class'] );
+			}
+
+			if (isset($formOpt['class'])){
 				unset($formOpt['class']);
 			}
 
-			if ( $formOpt['novalidate'] ) {
+
+			if ( isset($formOpt['novalidate']) ) {
 				$output .= ' novalidate';
 				unset($formOpt['novalidate']);
 			}
 
 
 			if (!empty($formOpt)){
-
-
 				foreach ($formOpt as $key=>$val){
-					$output.= $key.'="'.$val.'"';
+					if (!empty($val)){
+						$output.=" ".$key.'="'.$val.'"';
+					}
 				}
-
 			}
 
 			$output .= '>';
 		}
+
 
 		// Add honeypot anti-spam field
 		if ( $this->form['add_honeypot'] ) {
