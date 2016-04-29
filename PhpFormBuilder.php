@@ -28,12 +28,9 @@ class PhpFormBuilder {
 			'enctype'      => 'application/x-www-form-urlencoded',
 			'class'        => array(),
 			'id'           => '',
-			'markup'       => 'html',
 			'novalidate'   => false,
-			'add_nonce'    => false,
-			'add_honeypot' => true,
-			'form_element' => true,
-			'add_submit'   => true,
+			'form_add_submit'   => true,
+			'form_markup'       => 'html',
 			'role'         =>'form'
 		);
 
@@ -82,7 +79,7 @@ class PhpFormBuilder {
 				}
 				break;
 
-			case 'markup':
+			case 'form_markup':
 				if ( ! in_array( $val, array( 'html', 'xhtml' ) ) ) {
 					return false;
 				}
@@ -98,7 +95,7 @@ class PhpFormBuilder {
 			case 'novalidate':
 			case 'add_honeypot':
 			case 'form_element':
-			case 'add_submit':
+			case 'form_add_submit':
 				if ( ! is_bool( $val ) ) {
 					return false;
 				}
@@ -235,38 +232,13 @@ class PhpFormBuilder {
 
 			if (!empty($formOpt)){
 				foreach ($formOpt as $key=>$val){
-					if (!empty($val)){
+					if (!empty($val) && strpos('form_',$key)===false ){
 						$output.=" ".$key.'="'.$val.'"';
 					}
 				}
 			}
 
 			$output .= '>';
-		}
-
-
-		// Add honeypot anti-spam field
-		if ( $this->form['add_honeypot'] ) {
-			$this->add_input( 'Leave blank to submit', array(
-				'name'             => 'honeypot',
-				'slug'             => 'honeypot',
-				'id'               => 'form_honeypot',
-				'wrap_tag'         => 'div',
-				'wrap_class'       => array( 'form_field_wrap', 'hidden' ),
-				'wrap_id'          => '',
-				'wrap_style'       => 'display: none',
-				'request_populate' => false
-			) );
-		}
-
-		// Add a WordPress nonce field
-		if ( $this->form['add_nonce'] && function_exists( 'wp_create_nonce' ) ) {
-			$this->add_input( 'WordPress nonce', array(
-				'value'            => wp_create_nonce( $this->form['add_nonce'] ),
-				'add_label'        => false,
-				'type'             => 'hidden',
-				'request_populate' => false
-			) );
 		}
 
 		// Iterate through the input queue and add input HTML
@@ -453,7 +425,7 @@ class PhpFormBuilder {
 		endforeach;
 
 		// Auto-add submit button
-		if ( ! $this->has_submit && $this->form['add_submit'] ) {
+		if ( ! $this->has_submit && $this->form['form_add_submit'] ) {
 			$output .= '<div class="form_field_wrap"><input type="submit" value="Submit" name="submit"></div>';
 		}
 
@@ -472,7 +444,7 @@ class PhpFormBuilder {
 
 	// Easy way to auto-close fields, if necessary
 	function field_close() {
-		return $this->form['markup'] === 'xhtml' ? ' />' : '>';
+		return $this->form['form_markup'] === 'xhtml' ? ' />' : '>';
 	}
 
 	// Validates id and class attributes
