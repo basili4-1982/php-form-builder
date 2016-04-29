@@ -29,9 +29,10 @@ class PhpFormBuilder {
 			'class'        => array(),
 			'id'           => '',
 			'novalidate'   => false,
+			'role'         =>'form',
 			'form_add_submit'   => true,
 			'form_markup'       => 'html',
-			'role'         =>'form'
+			'form_element' => true,
 		);
 
 		// Merge with arguments, if present
